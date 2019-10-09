@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  service1:
+    # image is defined in dockerfile instead (node 10)
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context:  ./backend/server1
+    ports:
+      - "8001:8001"
+    networks:
+      - backend
+    container_name: service1
+    
+  service2:
+    # image could be built and saved for this.
+    # since node is used in both containers, it is downloaded anyway
+    # many of the build actions are cached too, so it's easiest to just have startup similar to service1
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context:  ./backend/server2
+    ports:
+      - "12346:8002"
+    networks:
+      - backend
+    container_name: service2
+  
+networks:
+  backend:
+
